@@ -16,28 +16,40 @@ export const InstallPWA: React.FC = () => {
       setIsInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    const handleAppInstalled = () => {
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    };
 
-    // Ocultar si la app ya está instalada (standalone)
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstallable(false);
     }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'accepted') {
-      setIsInstallable(false);
+      if (outcome === 'accepted') {
+        setIsInstallable(false);
+      }
+    } catch (error) {
+      console.error('Error al intentar instalar:', error);
+    } finally {
+      // El prompt se consume tras usarse; limpiamos la referencia
+      setDeferredPrompt(null);
     }
-    setDeferredPrompt(null);
   };
 
   if (!isInstallable) return null;
@@ -45,7 +57,7 @@ export const InstallPWA: React.FC = () => {
   return (
     <button
       onClick={handleInstallClick}
-      className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition-all rounded-lg shadow-md cursor-pointer"
+      className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition-all rounded-lg shadow-md cursor-pointer shrink-0"
       title="Instalar VerbHub en tu dispositivo"
     >
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

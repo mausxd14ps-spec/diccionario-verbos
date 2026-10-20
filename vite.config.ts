@@ -15,28 +15,23 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt', 'og-image.png', 'sitemap.xml'],
+      includeAssets: ['robots.txt', 'og-image.png', 'sitemap.xml', 'favicon.svg', 'pwa-icon.png'],
       manifest: {
+        id: '/',
         name: 'VerbHub — Diccionario Interactivo',
         short_name: 'VerbHub',
         description: 'Diccionario interactivo de verbos en inglés con conjugaciones y ejemplos.',
-        theme_color: '#0f172a',
+        theme_color: '#4f46e5',
         background_color: '#0f172a',
         display: 'standalone',
         start_url: '/',
         scope: '/',
         icons: [
           {
-            src: '/favicon.svg',
-            sizes: '192x192 512x512',
-            type: 'image/svg+xml',
-            purpose: 'any'
-          },
-          {
-            src: '/og-image.png',
+            src: '/pwa-icon.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any'
+            purpose: 'any maskable'
           }
         ]
       }

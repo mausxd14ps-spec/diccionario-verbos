@@ -1,4 +1,5 @@
 import { FORM_ORDER, FORM_LABELS, type FormKey, type Verb } from "../types";
+import SpeakButton from "./SpeakButton";
 
 interface VerbCardProps {
   verb: Verb;
@@ -54,6 +55,8 @@ export default function VerbCard({ verb, isOpen, onToggle, isInCart, onToggleCar
               <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${typeBadgeClass}`}>
                 {verb.type === "regular" ? "Regular" : "Irregular"}
               </span>
+                            <SpeakButton text={verb.base} />
+                            <SpeakButton text={verb.base} slow />
             </div>
             <p className="text-base font-semibold text-indigo-200">{verb.es}</p>
             <p className="mt-0.5 text-sm text-slate-400">{verb.definition}</p>
@@ -84,7 +87,10 @@ export default function VerbCard({ verb, isOpen, onToggle, isInCart, onToggleCar
             {FORM_ORDER.map((key) => (
               <div key={key} className="rounded-xl border border-slate-800 bg-slate-900 p-3 text-center">
                 <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{FORM_LABELS[key]}</p>
-                <p className="mt-1 text-sm font-bold text-white">{verb.forms[key]}</p>
+                <div className="mt-1 flex items-center justify-center gap-2">
+                  <p className="text-sm font-bold text-white">{verb.forms[key]}</p>
+                  <SpeakButton text={verb.forms[key]} />
+                </div>
               </div>
             ))}
           </div>
@@ -118,7 +124,10 @@ export default function VerbCard({ verb, isOpen, onToggle, isInCart, onToggleCar
                     <span className="mb-1 inline-block rounded-md bg-indigo-500/15 px-2 py-0.5 text-[10px] font-bold text-indigo-300 ring-1 ring-indigo-500/30">
                       {verb.detailed ? FORM_EXAMPLE_LABELS[key] : "Ejemplo"}
                     </span>
-                    <p className="font-medium text-white">{verb.examples[key].en}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-white">{verb.examples[key].en}</p>
+                      <SpeakButton text={verb.examples[key].en} />
+                    </div>
                   </div>
                   <p className="text-sm italic text-slate-400 sm:text-right">{verb.examples[key].es}</p>
                 </div>

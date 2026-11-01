@@ -8,6 +8,7 @@ import AlphabetNav from "./components/AlphabetNav";
 import VerbCard from "./components/VerbCard";
 import Pagination from "./components/Pagination";
 import CartPanel from "./components/CartPanel";
+import Quiz from "./components/Quiz";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
 const VERBS = verbsData as Verb[];
@@ -22,6 +23,7 @@ export default function App() {
   const [openIds, setOpenIds] = useState<Set<string>>(new Set());
   const [cart, setCart] = useLocalStorage<string[]>("evp-cart", []);
   const [cartOpen, setCartOpen] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
 
   const popularVerbs = useMemo(() => VERBS.filter((v) => v.popular), []);
 
@@ -191,6 +193,17 @@ export default function App() {
           </span>
         )}
       </button>
+
+            <button
+        type="button"
+        onClick={() => setQuizOpen(true)}
+        className="fixed bottom-5 left-5 z-40 flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-3.5 text-sm font-bold text-white shadow-xl shadow-emerald-500/40 transition hover:scale-105 hover:bg-emerald-500"
+      >
+        <span className="text-lg">🎯</span>
+        Quiz
+      </button>
+
+      <Quiz open={quizOpen} onClose={() => setQuizOpen(false)} allVerbs={VERBS} listVerbs={cartVerbs} />
 
       <CartPanel
         open={cartOpen}
